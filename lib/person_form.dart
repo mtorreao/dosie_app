@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PersonForm extends StatefulWidget {
   @override
@@ -13,6 +15,18 @@ class _PersonFormState extends State<PersonForm> {
         title: Text('DEF'),
       ),
       body: Text('ABC'),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          print('aaa');
+          var user = await FirebaseAuth.instance.signInAnonymously();
+          print(user);
+          var docref = await Firestore.instance.collection('dosie_app/${user.uid}/people').add({
+            'first_name': 'John'
+          });
+          print(await docref.get());
+        },
+        child: Icon(Icons.save),
+      ),
     );
   }
 }
