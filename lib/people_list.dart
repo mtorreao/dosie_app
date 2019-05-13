@@ -15,7 +15,7 @@ class PeopleList extends StatelessWidget {
           var person = Person.fromSnapshot(peopleList[index]);
           print(person);
           return ListTile(
-            title: Text(person.firstName),
+            title: Text(person.fullName != null ? person.fullName : person.firstName),
             onTap: () {},
           );
         });
