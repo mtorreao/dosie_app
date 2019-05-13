@@ -24,6 +24,10 @@ class _PersonFormState extends State<PersonForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0,),
+                child: Text('Dados Pessoais', style: TextStyle(fontSize: 20.0),),
+              ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Nome Completo'),
                 validator: (value) {
@@ -34,10 +38,13 @@ class _PersonFormState extends State<PersonForm> {
                   }
                 },
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0,),
+                child: Text('Contatos', style: TextStyle(fontSize: 20.0),),
+              ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Telefone 1'),
               ),
-              Text('Contatos'),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Telefone 2'),
               ),
