@@ -40,16 +40,34 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: StreamBuilder(
             builder: (context, snapshot) {
-              print(snapshot.data.documents);
-              if (snapshot.hasData) {
-                return PeopleList(snapshot.data.documents);
-              } else {
-                return CircularProgressIndicator();
+              switch (snapshot.connectionState) {
+                case ConnectionState.waiting:
+                  return Center(child: CircularProgressIndicator());
+                  break;
+                case ConnectionState.active:
+                  if (snapshot.hasData) {
+                    return PeopleList(snapshot.data.documents);
+                  } else {
+                    return Center(
+                      child: Text('Ocorreu um erro inesperado'),
+                    );
+                  }
+                  break;
+                case ConnectionState.none:
+                  return Center(
+                    child: Text('Lista vazia'),
+                  );
+                  break;
+                case ConnectionState.done:
+                  return Center(
+                    child: Text('Ocorreu um erro inesperado'),
+                  );
+                  break;
               }
             },
-            stream: this.user != null
+            stream: user != null
                 ? Firestore.instance
-                    .collection('/dosie_app/${user.uid}/people')
+                    .collection('dosie_app/${user.uid}/people')
                     .snapshots()
                 : null,
           ),
