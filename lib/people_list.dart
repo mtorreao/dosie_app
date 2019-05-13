@@ -1,4 +1,5 @@
 import 'package:dosie_app/person.dart';
+import 'package:dosie_app/person_form.dart';
 import 'package:flutter/material.dart';
 
 class PeopleList extends StatelessWidget {
@@ -15,8 +16,18 @@ class PeopleList extends StatelessWidget {
           var person = Person.fromSnapshot(peopleList[index]);
           print(person);
           return ListTile(
-            title: Text(person.fullName != null ? person.fullName : person.firstName),
-            onTap: () {},
+            title: Text(
+                person.fullName != null ? person.fullName : person.firstName),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PersonForm(
+                          person: person,
+                        ),
+                  ));
+            },
           );
         });
   }

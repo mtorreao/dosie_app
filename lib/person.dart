@@ -1,9 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Person {
+  String id;
   String firstName;
   String fullName;
   int cellphone1;
 
-  Person.fromSnapshot(document) {
+  Person.fromSnapshot(DocumentSnapshot document) {
+    id = document.documentID;
     this.firstName = document['first_name'];
     this.fullName = document['full_name'];
     this.cellphone1 = document['cellphone_1'];
@@ -13,7 +17,7 @@ class Person {
 
   @override
   String toString() {
-    return 'First Name: $firstName\nCellphone 1: $cellphone1';
+    return 'First Name: $firstName\nFull Name: $fullName\nCellphone 1: $cellphone1';
   }
 
   Map<String, dynamic> toMap() {

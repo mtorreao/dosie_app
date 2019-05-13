@@ -5,6 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class PersonForm extends StatefulWidget {
+  final Person person;
+
+  PersonForm({this.person});
+
   @override
   _PersonFormState createState() => _PersonFormState();
 }
@@ -16,11 +20,23 @@ class _PersonFormState extends State<PersonForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    if (widget.person != null) {
+      _person.id = widget.person.id;
+      _person.firstName = widget.person.firstName;
+      _person.fullName = widget.person.fullName;
+      _person.cellphone1 = widget.person.cellphone1;
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Pessoa'),
+        title: Text(
+            widget.person != null ? widget.person.firstName : 'Nova Pessoa'),
       ),
       body: Padding(
         padding:
@@ -41,6 +57,7 @@ class _PersonFormState extends State<PersonForm> {
               ),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Nome Completo'),
+                initialValue: _person.fullName,
                 validator: (value) {
                   if (value.isEmpty) {
                     return 'Não pode ser vazio';
@@ -62,6 +79,7 @@ class _PersonFormState extends State<PersonForm> {
                 ),
               ),
               TextFormField(
+                initialValue: _person.cellphone1.toString(),
                 keyboardType: TextInputType.numberWithOptions(decimal: false),
                 decoration: InputDecoration(labelText: 'Telefone 1'),
                 validator: (value) {
@@ -95,8 +113,14 @@ class _PersonFormState extends State<PersonForm> {
       print('Validado com sucesso!');
       _formKey.currentState.save();
       FirebaseUser user = await AuthService().getUser();
-      Firestore.instance.collection('dosie_app/${user.uid}/people').add(
-          _person.toMap());
+      var collectionRef =
+      Firestore.instance.collection('dosie_app/${user.uid}/people');
+      if (_person.id != null && _person.id.isNotEmpty) {
+        collectionRef.document(_person.id).updateData(_person.toMap());
+      } else {
+        collectionRef.add(_person.toMap());
+      }
+
       _scaffoldKey.currentState
           .showSnackBar(SnackBar(content: Text('Validado com sucesso!')));
     }
