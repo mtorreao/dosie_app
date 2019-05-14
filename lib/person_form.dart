@@ -26,6 +26,7 @@ class _PersonFormState extends State<PersonForm> {
       _person.firstName = widget.person.firstName;
       _person.fullName = widget.person.fullName;
       _person.cellphone1 = widget.person.cellphone1;
+      _person.likes = widget.person.likes;
     }
     super.initState();
   }
@@ -38,66 +39,121 @@ class _PersonFormState extends State<PersonForm> {
         title: Text(
             widget.person != null ? widget.person.firstName : 'Nova Pessoa'),
       ),
-      body: Padding(
-        padding:
-        EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding:
+          EdgeInsets.only(top: 8.0, left: 16.0, right: 16.0, bottom: 16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 8.0,
+                  ),
+                  child: Text(
+                    'Dados Pessoais',
+                    style:
+                    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                child: Text(
-                  'Dados Pessoais',
-                  style: TextStyle(fontSize: 20.0),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Nome Completo'),
+                  initialValue: _person.fullName,
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Não pode ser vazio';
+                    } else if (value
+                        .split(' ')
+                        .length < 2) {
+                      return 'Colocar nome e sobrenome';
+                    }
+                  },
+                  onSaved: (value) {
+                    _person.fullName = value;
+                  },
                 ),
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Nome Completo'),
-                initialValue: _person.fullName,
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Não pode ser vazio';
-                  } else if (value.split(' ').length < 2) {
-                    return 'Colocar nome e sobrenome';
-                  }
-                },
-                onSaved: (value) {
-                  _person.fullName = value;
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 8.0,
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                  ),
+                  child: Text(
+                    'Contatos',
+                    style:
+                    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                child: Text(
-                  'Contatos',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-              ),
-              TextFormField(
-                initialValue: _person.cellphone1.toString(),
-                keyboardType: TextInputType.numberWithOptions(decimal: false),
-                decoration: InputDecoration(labelText: 'Telefone 1'),
-                validator: (value) {
-                  if (value.isEmpty) {
-                    return 'Não pode ser vazio';
+                TextFormField(
+                  initialValue: _person.cellphone1.toString(),
+                  keyboardType: TextInputType.numberWithOptions(decimal: false),
+                  decoration: InputDecoration(labelText: 'Telefone 1'),
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return 'Não pode ser vazio';
 //                  } else if () {
 //                    return 'Não é um número de telefone válido.';
-                  }
-                },
-                onSaved: (value) {
-                  _person.cellphone1 = int.parse(value);
-                },
-              ),
-//              Padding(
-//                padding: const EdgeInsets.only(top: 8.0),
-//                child: Text('Gosta de', style: TextStyle(fontSize: 20.0)),
-//              ),
-            ],
+                    }
+                  },
+                  onSaved: (value) {
+                    _person.cellphone1 = int.parse(value);
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16.0,
+                  ),
+                  child: Text(
+                    'Gosta de:',
+                    style:
+                    TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: _person.likes.length,
+                  itemBuilder: (context, index) {
+                    return Row(children: [
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: _person.likes[index],
+                          decoration: InputDecoration(
+                            labelText: 'Gosto ${index + 1}',
+                          ),
+                          validator: (value) {
+                            if (value.isEmpty) {
+                              return 'Não pode ser vazio';
+                            }
+                          },
+                          onSaved: (value) {
+                            _person.likes[index] = value;
+                          },
+                        ),
+                      ),
+                      Center(
+                          child: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _person.likes.removeAt(index);
+                                });
+                              }, icon: Icon(Icons.close))),
+                    ]);
+                  },
+                ),
+                Center(
+                  child: RaisedButton.icon(
+                      label: Text('Novo gosto'),
+                      icon: Icon(
+                        Icons.add,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _person.likes.add('');
+                        });
+                      }),
+                ),
+              ],
+            ),
           ),
         ),
       ),
