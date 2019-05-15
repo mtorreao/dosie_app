@@ -26,6 +26,7 @@ class _LikesListState extends State<LikesList> {
           ),
         ),
         ListView.builder(
+          physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget._person.likes.length,
           itemBuilder: (context, index) {

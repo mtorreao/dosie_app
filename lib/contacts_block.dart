@@ -38,6 +38,17 @@ class _ContactsBlockState extends State<ContactsBlock> {
           },
           onSaved: (value) => widget._person.cellphone1 = int.parse(value),
         ),
+        TextFormField(
+          initialValue: widget._person.email,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(labelText: 'Email'),
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Não pode ser vazio';
+            }
+          },
+          onSaved: (value) => widget._person.email = value,
+        ),
       ],
     );
   }

@@ -17,7 +17,7 @@ class PersonForm extends StatefulWidget {
 }
 
 class _PersonFormState extends State<PersonForm> {
-  final _person = Person();
+  Person _person = Person();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -25,11 +25,7 @@ class _PersonFormState extends State<PersonForm> {
   @override
   void initState() {
     if (widget.person != null) {
-      _person.id = widget.person.id;
-      _person.firstName = widget.person.firstName;
-      _person.fullName = widget.person.fullName;
-      _person.cellphone1 = widget.person.cellphone1;
-      _person.likes = widget.person.likes;
+      _person = widget.person;
     }
     super.initState();
   }

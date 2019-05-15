@@ -6,12 +6,14 @@ class Person {
   String fullName;
   int cellphone1;
   List<String> likes = List<String>();
+  String email;
 
   Person.fromSnapshot(DocumentSnapshot document) {
     id = document.documentID;
     this.firstName = document['first_name'];
     this.fullName = document['full_name'];
     this.cellphone1 = document['cellphone_1'];
+    this.email = document['email'];
     likes = List<String>();
     try {
       if (document['likes'] != null) {
@@ -20,11 +22,12 @@ class Person {
     } catch (e) {}
   }
 
-  Person({this.firstName, this.fullName, this.cellphone1, this.likes});
+  Person(
+      {this.firstName, this.fullName, this.cellphone1, this.likes, this.email});
 
   @override
   String toString() {
-    return 'First Name: $firstName, Full Name: $fullName, Cellphone 1: $cellphone1, Likes: $likes';
+    return 'Full Name: $fullName, Email: $email, Cellphone 1: $cellphone1, Likes: $likes';
   }
 
   Map<String, dynamic> toMap() {
@@ -33,6 +36,7 @@ class Person {
       'first_name': this.firstName,
       'full_name': this.fullName,
       'cellphone_1': this.cellphone1,
+      'email': email,
       'likes': likes
     });
   }
