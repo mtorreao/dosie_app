@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Person {
+
   String id;
   String firstName;
   String fullName;
@@ -9,17 +10,12 @@ class Person {
   String email;
 
   Person.fromSnapshot(DocumentSnapshot document) {
-    id = document.documentID;
-    this.firstName = document['first_name'];
-    this.fullName = document['full_name'];
-    this.cellphone1 = document['cellphone_1'];
-    this.email = document['email'];
-    likes = List<String>();
-    try {
-      if (document['likes'] != null) {
-        this.likes = List<String>.from(document['likes']);
-      }
-    } catch (e) {}
+    this.id = document.documentID ?? '';
+    this.firstName = document['first_name'] ?? '';
+    this.fullName = document['full_name'] ?? '';
+    this.cellphone1 = document['cellphone_1'] ?? '';
+    this.email = document['email'] ?? '';
+    this.likes = List<String>.from(document['likes']) ?? List<String>();
   }
 
   Person(
